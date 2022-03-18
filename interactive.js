@@ -1,4 +1,4 @@
-import MediumEditor from 'medium-editor'
+import MediumEditor from 'joinf-medium-editor-master'
 
 export default {
   name: 'medium-editor',

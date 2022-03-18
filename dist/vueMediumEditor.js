@@ -277,9 +277,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _mediumEditor = __webpack_require__(4);
+var _joinfMediumEditorMaster = __webpack_require__(4);
 
-var _mediumEditor2 = _interopRequireDefault(_mediumEditor);
+var _joinfMediumEditorMaster2 = _interopRequireDefault(_joinfMediumEditorMaster);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -318,7 +318,7 @@ exports.default = {
 
       this.$refs.element.innerHTML = this.text;
 
-      this.api = new _mediumEditor2.default(this.$refs.element, this.options);
+      this.api = new _joinfMediumEditorMaster2.default(this.$refs.element, this.options);
 
       // bind edit operations to model
       // we need to store the handler in order to later on detach it again
@@ -347,12 +347,16 @@ exports.default = {
      * We only tear down the editor, if the options actually changed.
      * See: https://github.com/yabwe/medium-editor/issues/1129
      */
-    options: function options(newOptions) {
-      this.tearDown();
-      this.createAndSubscribe();
+    options: {
+      handler: function handler(newOptions) {
+        this.tearDown();
+        this.createAndSubscribe();
+      },
+
+      deep: true
     }
   },
-  MediumEditor: _mediumEditor2.default
+  MediumEditor: _joinfMediumEditorMaster2.default
 };
 
 /***/ }),
@@ -6318,6 +6322,7 @@ MediumEditor.extensions = {};
             if (!this.relativeContainer) {
                 this.getEditorOption('elementsContainer').appendChild(this.getToolbarElement());
             } else {
+                this.relativeContainer.style.position = 'relative' // toolbar父节点设置为relative，确保toolbar可以跟随浮动
                 this.relativeContainer.appendChild(this.getToolbarElement());
             }
         },
@@ -6343,7 +6348,7 @@ MediumEditor.extensions = {};
             if (this.static) {
                 toolbar.className += ' static-toolbar';
             } else if (this.relativeContainer) {
-                toolbar.className += ' medium-editor-relative-toolbar';
+                // toolbar.className += ' medium-editor-relative-toolbar';
             } else {
                 toolbar.className += ' medium-editor-stalker-toolbar';
             }
@@ -6766,6 +6771,8 @@ MediumEditor.extensions = {};
                     } else {
                         this.positionToolbar(selection);
                     }
+                } else {
+                    this.positionToolbar(selection);
                 }
 
                 this.trigger('positionedToolbar', {}, this.base.getFocusedElement());
@@ -6858,6 +6865,8 @@ MediumEditor.extensions = {};
                 elementsContainerAbsolute = ['absolute', 'fixed'].indexOf(window.getComputedStyle(elementsContainer).getPropertyValue('position')) > -1,
                 positions = {},
                 relativeBoundary = {},
+                offsetDom = document.querySelector('.container-scroll-wrap'), // 通过toolbar的祖先节点获取，offset偏移量
+                scrollDom = document.querySelector('.container-scroll-view'), // 通过toolbar的父节点获取，scroll偏移量
                 middleBoundary, elementsContainerBoundary;
 
             // If container element is absolute / fixed, recalculate boundaries to be relative to the container
@@ -6881,7 +6890,7 @@ MediumEditor.extensions = {};
             }
 
             middleBoundary = boundary.left + boundary.width / 2;
-            positions.top += boundary.top - toolbarHeight;
+            positions.top += boundary.top - toolbarHeight - offsetDom.offsetTop + scrollDom.scrollTop;
 
             if (boundary.top < buttonHeight) {
                 toolbarElement.classList.add('medium-toolbar-arrow-over');
@@ -6894,13 +6903,13 @@ MediumEditor.extensions = {};
             }
 
             if (middleBoundary < halfOffsetWidth) {
-                positions.left = defaultLeft + halfOffsetWidth;
+                positions.left = defaultLeft + halfOffsetWidth - offsetDom.offsetLeft;
                 positions.right = 'initial';
             } else if ((containerWidth - middleBoundary) < halfOffsetWidth) {
                 positions.left = 'auto';
                 positions.right = 0;
             } else {
-                positions.left = defaultLeft + middleBoundary;
+                positions.left = defaultLeft + middleBoundary - offsetDom.offsetLeft;
                 positions.right = 'initial';
             }
 

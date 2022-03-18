@@ -1,7 +1,7 @@
 {
-  "name": "vue2-medium-editor",
-  "version": "1.1.6",
-  "description": "A VueJS plugin for medium-editor",
+  "name": "joinf-medium-editor-vue",
+  "version": "1.0.5",
+  "description": "A VueJS plugin for medium-editor by joinf",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/FranzSkuffka/vue-medium-editor.git"
+    "url": "git+https://github.com/gaoxingl/joinf-medium-editor-vue.git"
   },
   "keywords": [
     "vue",
@@ -24,11 +24,11 @@
   "author": "Jan Wirth <contact@jan-wirth.de>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/FranzSkuffka/vue-medium-editor/issues"
+    "url": "https://github.com/gaoxingl/joinf-medium-editor-vue/issues"
   },
-  "homepage": "https://github.com/FranzSkuffka/vue-medium-editor#readme",
+  "homepage": "https://github.com/gaoxingl/joinf-medium-editor-vue#readme",
   "dependencies": {
-    "medium-editor": "^5.22.1",
+    "joinf-medium-editor-master": "^1.0.3",
     "webpack-cli": "^3.1.2"
   },
   "devDependencies": {
